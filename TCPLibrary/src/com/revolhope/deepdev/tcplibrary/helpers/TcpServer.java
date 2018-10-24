@@ -49,15 +49,14 @@ public class TcpServer
 		Socket socket = serv.accept();
 		
 		ObjectInputStream input;
-		Packet packet;
 		while(true)
 		{
 			input = new ObjectInputStream(socket.getInputStream());
-			packet = (Packet) input.readObject();
-			Packet responsePacket = callback.process(packet);
+			Object o = input.readObject();
+			Packet responsePacket = callback.process((Packet) o);
 			callback.response(responsePacket, socket.getInetAddress(), port);
-			input.close();
-			socket.close();
+			//input.close();
+			//socket.close();
 		}
 		// serv.close();
 	}

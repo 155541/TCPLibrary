@@ -12,7 +12,12 @@ public class Token implements Serializable {
 	private String token;
 	private long expirationDate;
 	
-	
+	/**
+	 * 
+	 * @param deviceId
+	 * @param token
+	 * @param expirationDate
+	 */
 	public Token(long deviceId, String token, long expirationDate)
 	{
 		this.deviceId = deviceId;
@@ -20,6 +25,10 @@ public class Token implements Serializable {
 		this.expirationDate = expirationDate;
 	}
 	
+	/**
+	 * 
+	 * @param deviceId
+	 */
 	public Token(long deviceId)
 	{
 		this.deviceId = deviceId;
@@ -30,6 +39,10 @@ public class Token implements Serializable {
 		this.expirationDate = cal.getTimeInMillis();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isValid()
 	{
 		Calendar now = Calendar.getInstance();
@@ -38,6 +51,9 @@ public class Token implements Serializable {
 		return now.before(expiration);
 	}
 	
+	/**
+	 * 
+	 */
 	public void refresh()
 	{
 		this.token = UUID.randomUUID().toString().replace("-", "");
@@ -45,18 +61,28 @@ public class Token implements Serializable {
 		cal.add(Calendar.DAY_OF_MONTH, 2);
 		this.expirationDate = cal.getTimeInMillis();
 	}
-
+	
+	
 	@Override
 	public String toString() 
 	{
 		return this.token;
 	}
 	
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public long getDeviceId()
 	{
 		return this.deviceId;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public long getExpirationDate()
 	{
 		return this.expirationDate;
