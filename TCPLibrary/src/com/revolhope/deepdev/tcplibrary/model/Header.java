@@ -7,7 +7,7 @@ public class Header implements Serializable
 	private static final long serialVersionUID = 7092998169043400874L;
 	private Type type;
 	private long deviceId;
-	private String token;
+	private Token token;
 	private long timestamp;
 	
 	public Type getType() {
@@ -22,10 +22,10 @@ public class Header implements Serializable
 	public void setDeviceId(long deviceId) {
 		this.deviceId = deviceId;
 	}
-	public String getToken() {
+	public Token getToken() {
 		return token;
 	}
-	public void setToken(String token) {
+	public void setToken(Token token) {
 		this.token = token;
 	}
 	public long getTimestamp() {
