@@ -5,16 +5,16 @@ import java.io.Serializable;
 public class Header implements Serializable 
 {
 	private static final long serialVersionUID = 7092998169043400874L;
-	private Type type;
+	private Code code;
 	private long deviceId;
 	private Token token;
 	private long timestamp;
 	
-	public Type getType() {
-		return type;
+	public Code getCode() {
+		return code;
 	}
-	public void setType(Type type) {
-		this.type = type;
+	public void setCode(Code type) {
+		this.code = type;
 	}
 	public long getDeviceId() {
 		return deviceId;
