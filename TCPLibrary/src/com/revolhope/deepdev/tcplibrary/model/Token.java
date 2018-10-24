@@ -44,6 +44,21 @@ public class Token implements Serializable {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 2);
 		this.expirationDate = cal.getTimeInMillis();
-		
+	}
+
+	@Override
+	public String toString() 
+	{
+		return this.token;
+	}
+	
+	public long getDeviceId()
+	{
+		return this.deviceId;
+	}
+	
+	public long getExpirationDate()
+	{
+		return this.expirationDate;
 	}
 }
