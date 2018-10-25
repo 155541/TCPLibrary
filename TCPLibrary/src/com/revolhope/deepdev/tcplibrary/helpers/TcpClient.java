@@ -25,13 +25,14 @@ public class TcpClient
 		ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 		out.writeObject(packet);
 		out.flush();
-		out.close();
 		
 		ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 		Packet response = (Packet) in.readObject();
-		in.close();
-		
+	
 		callback.responseReceived(response);
+		
+		in.close();
+		out.close();
 		socket.close();
 	}
 }
