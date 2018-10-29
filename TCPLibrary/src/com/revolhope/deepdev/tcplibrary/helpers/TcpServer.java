@@ -14,7 +14,7 @@ public class TcpServer
 {
 	/***
 	 * Callback to handle when packet is received. Provide two methods, to process incoming packets and to response to this client.
-	 * @author storm
+	 * @author storm 
 	 */
 	public interface OnReceive
 	{
