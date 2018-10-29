@@ -3,6 +3,7 @@ package com.revolhope.deepdev.tcplibrary.helpers;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,8 +30,9 @@ public class TcpServer
 		 * @param obj Packet to send to client.
 		 * @param addr InetAddress of the client.
 		 * @param port Port of the socket.
+		 * @param outputStream OutputStream from current socket.
 		 */
-		void response(Packet obj, InetAddress addr, int port);
+		void response(Packet obj, InetAddress addr, int port, OutputStream outputStream);
 	}
 
 	private TcpServer() {}
@@ -54,11 +56,11 @@ public class TcpServer
 			input = new ObjectInputStream(socket.getInputStream());
 			Object o = input.readObject();
 			Packet responsePacket = callback.process((Packet) o);
-			callback.response(responsePacket, socket.getInetAddress(), port);
-			//input.close();
-			//socket.close();
+			callback.response(responsePacket, socket.getInetAddress(), port, socket.getOutputStream());
 		}
-		// serv.close();
+		//input.close();
+		//socket.close();
+		//serv.close();
 	}
 	
 	/***
@@ -66,16 +68,14 @@ public class TcpServer
 	 * @param packet Object to send
 	 * @param addr InetAddress of the client.
 	 * @param port Port of the communications.
+	 * @param outputStream OutputStream from current socket
 	 * @throws IOException
 	 */
-	public static void send(Packet packet, InetAddress addr, int port) throws IOException
+	public static void send(Packet packet, InetAddress addr, int port, OutputStream outputStream) throws IOException
 	{
-		Socket socket = new Socket(addr, port);
-		ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-		
+		ObjectOutputStream out = new ObjectOutputStream(outputStream);
 		out.writeObject(packet);
 		out.flush();
-		out.close();
-		socket.close();
+		//out.close();
 	}
 }
