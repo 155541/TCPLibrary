@@ -3,7 +3,6 @@ package com.revolhope.deepdev.tcplibrary.helpers;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +11,9 @@ import com.revolhope.deepdev.tcplibrary.model.Packet;
 
 public class TcpServer
 {
+	
+	private static ServerSocket serv;
+	
 	/***
 	 * Callback to handle when packet is received. Provide two methods, to process incoming packets and to response to this client.
 	 * @author storm 
@@ -32,35 +34,43 @@ public class TcpServer
 		 * @param port Port of the socket.
 		 * @param outputStream OutputStream from current socket.
 		 */
-		void response(Packet obj, InetAddress addr, int port, OutputStream outputStream);
+		void response(Packet obj, InetAddress addr, int port, ObjectOutputStream output);
 	}
 
 	private TcpServer() {}
 	
+	/**
+	 * 
+	 * @param port
+	 * @throws IOException
+	 */
+	public static void bind(int port) throws IOException
+	{
+		serv = new ServerSocket(port);
+	}
+	
 	/***
-	 * Infinite-loop method to listen communications between the server and clients. 
-	 * @param port Integer representing the port of the communications
+	 * Method to listen communications between the server and clients. 
 	 * @param callback OnReceive callback to implement.
 	 * @throws IOException 
 	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("resource")
-	public static void listen(int port, OnReceive callback) throws IOException, ClassNotFoundException
+	public static void listen(OnReceive callback) throws IOException, ClassNotFoundException
 	{
-		ServerSocket serv = new ServerSocket(port);
 		Socket socket = serv.accept();
-		
 		ObjectInputStream input;
-		while(true)
-		{
-			input = new ObjectInputStream(socket.getInputStream());
-			Object o = input.readObject();
-			Packet responsePacket = callback.process((Packet) o);
-			callback.response(responsePacket, socket.getInetAddress(), port, socket.getOutputStream());
-		}
-		//input.close();
-		//socket.close();
-		//serv.close();
+		ObjectOutputStream output;
+		
+		input = new ObjectInputStream(socket.getInputStream());
+		Object o = input.readObject();
+		Packet responsePacket = callback.process((Packet) o);
+		
+		output = new ObjectOutputStream(socket.getOutputStream());
+		callback.response(responsePacket, socket.getInetAddress(), socket.getPort(), output);
+		
+		input.close();
+		output.close();
+		socket.close();
 	}
 	
 	/***
@@ -71,11 +81,9 @@ public class TcpServer
 	 * @param outputStream OutputStream from current socket
 	 * @throws IOException
 	 */
-	public static void send(Packet packet, InetAddress addr, int port, OutputStream outputStream) throws IOException
+	public static void send(Packet packet, InetAddress addr, int port, ObjectOutputStream output) throws IOException
 	{
-		ObjectOutputStream out = new ObjectOutputStream(outputStream);
-		out.writeObject(packet);
-		out.flush();
-		//out.close();
+		output.writeObject(packet);
+		output.flush();
 	}
 }
