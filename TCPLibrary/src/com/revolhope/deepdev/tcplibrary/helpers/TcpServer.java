@@ -23,9 +23,10 @@ public class TcpServer
 		/***
 		 * Method to process incoming packet. To implement at call method "listen()".
 		 * @param obj Packet received.
+		 * @param addr InetAddress of the client.
 		 * @return Packet object generated once is processed the original packet.
 		 */
-		Packet process(Packet obj);
+		Packet process(Packet obj, InetAddress addr);
 		
 		/***
 		 * Method to response to the client who send the packet.
@@ -58,15 +59,17 @@ public class TcpServer
 	public static void listen(OnReceive callback) throws IOException, ClassNotFoundException
 	{
 		Socket socket = serv.accept();
+		InetAddress clientAddr = socket.getInetAddress();
 		ObjectInputStream input;
 		ObjectOutputStream output;
 		
 		input = new ObjectInputStream(socket.getInputStream());
 		Object o = input.readObject();
-		Packet responsePacket = callback.process((Packet) o);
+		
+		Packet responsePacket = callback.process((Packet) o, clientAddr);
 		
 		output = new ObjectOutputStream(socket.getOutputStream());
-		callback.response(responsePacket, socket.getInetAddress(), socket.getPort(), output);
+		callback.response(responsePacket, clientAddr, socket.getPort(), output);
 		
 		input.close();
 		output.close();
