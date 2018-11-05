@@ -5,18 +5,18 @@ import java.io.Serializable;
 public class DataFile implements Serializable {
 
 	private static final long serialVersionUID = 8299125296030896675L;
-	private int id;
+	private long id;
 	private String filename;
 	private String extension;
 	private byte[] source;
 	private long targetId;
-	private long ownerId;
-	private long timestamp;
+	private long originId;
+	private long requestTimestamp;
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getFilename() {
@@ -43,16 +43,16 @@ public class DataFile implements Serializable {
 	public void setTargetId(long targetId) {
 		this.targetId = targetId;
 	}
-	public long getOwnerId() {
-		return ownerId;
+	public long getOriginId() {
+		return originId;
 	}
-	public void setOwnerId(long ownerId) {
-		this.ownerId = ownerId;
+	public void setOriginId(long ownerId) {
+		this.originId = ownerId;
 	}
 	public long getTimestamp() {
-		return timestamp;
+		return requestTimestamp;
 	}
 	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+		this.requestTimestamp = timestamp;
 	}
 }
