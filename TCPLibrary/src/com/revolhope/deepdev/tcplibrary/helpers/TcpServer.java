@@ -89,4 +89,33 @@ public class TcpServer
 		output.writeObject(packet);
 		output.flush();
 	}
+
+	/**
+	 * Method to transmit packet, it create it's own threat.
+	 * @param packet Object to send
+	 * @param addr InetAddress of the Client
+	 * @param port Port of the communications
+	 * @throws IOException
+	 */
+	public static void transmit(Packet packet, InetAddress addr, int port)
+	{
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try 
+				{
+					Socket socket = new Socket(addr, port);
+					ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+					output.writeObject(packet);
+					output.flush();
+					output.close();
+					socket.close();
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
 }
