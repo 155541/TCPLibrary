@@ -9,6 +9,7 @@ public enum Code implements Serializable
 	REQ_OPEN_SESSION,
 	REQ_TRANSMISSION,
 	REQ_PENDING_FILES,
+	REQ_DELETE_FILES,
 	REQ_CLOSE_SESSION,
 	
 	RES_OK,
